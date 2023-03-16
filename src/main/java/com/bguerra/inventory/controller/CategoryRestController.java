@@ -26,9 +26,15 @@ public class CategoryRestController {
         return response;
     }
 
-    @PostMapping("/categories")
+    @PostMapping("/categories")//save categories
     public ResponseEntity<CategoryResponseRest> save(@RequestBody Category category) {
         ResponseEntity<CategoryResponseRest> response = service.save(category);
+        return response;
+    }
+
+    @PutMapping("/categories/{id}")// update categories
+    public ResponseEntity<CategoryResponseRest> update(@RequestBody Category category, @PathVariable Long id) {
+        ResponseEntity<CategoryResponseRest> response = service.update(category, id);
         return response;
     }
 
