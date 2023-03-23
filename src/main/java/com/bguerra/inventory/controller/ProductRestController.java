@@ -22,11 +22,7 @@ public class ProductRestController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<ProductResponseRest> save(@RequestParam("picture") MultipartFile picture,
-                                                    @RequestParam("name") String name,
-                                                    @RequestParam("price") int price,
-                                                    @RequestParam("account") int account,
-                                                    @RequestParam("categoryId") Long categoryID) throws IOException {
+    public ResponseEntity<ProductResponseRest> save(@RequestParam("picture") MultipartFile picture, @RequestParam("name") String name, @RequestParam("price") int price, @RequestParam("account") int account, @RequestParam("categoryId") Long categoryID) throws IOException {
         Product product = new Product();
         product.setName(name);
         product.setAccount(account);
@@ -58,6 +54,24 @@ public class ProductRestController {
     @GetMapping("/products")//search by id
     public ResponseEntity<ProductResponseRest> search() {
         ResponseEntity<ProductResponseRest> response = productService.search();
+        return response;
+    }
+
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ProductResponseRest> update(@RequestParam("picture") MultipartFile picture,
+                                                      @RequestParam("name") String name,
+                                                      @RequestParam("price") int price,
+                                                      @RequestParam("account") int account,
+                                                      @RequestParam("categoryId") Long categoryID,
+                                                      @PathVariable Long id) throws IOException {
+
+        Product product = new Product();
+        product.setName(name);
+        product.setAccount(account);
+        product.setPrice(price);
+        product.setPicture(Util.compressZLib(picture.getBytes()));
+
+        ResponseEntity<ProductResponseRest> response = productService.update(product, categoryID, id);
         return response;
     }
 }
