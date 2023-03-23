@@ -36,4 +36,10 @@ public class ProductRestController {
         ResponseEntity<ProductResponseRest> response = productService.save(product, categoryID);
         return response;
     }
+
+    @GetMapping("/products/{id}")//search by id
+    public ResponseEntity<ProductResponseRest> searchById(@PathVariable Long id) {
+        ResponseEntity<ProductResponseRest> response = productService.searchById(id);
+        return response;
+    }
 }
