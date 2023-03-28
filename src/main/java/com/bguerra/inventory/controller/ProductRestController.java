@@ -3,11 +3,13 @@ package com.bguerra.inventory.controller;
 import com.bguerra.inventory.model.Product;
 import com.bguerra.inventory.response.ProductResponseRest;
 import com.bguerra.inventory.services.IProductService;
+import com.bguerra.inventory.util.ProductExcelExport;
 import com.bguerra.inventory.util.Util;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @CrossOrigin(origins = {"http://localhost:4200"})
@@ -73,5 +75,17 @@ public class ProductRestController {
 
         ResponseEntity<ProductResponseRest> response = productService.update(product, categoryID, id);
         return response;
+    }
+
+    @GetMapping("/products/export/excel")//export to excel file
+    public void exportToExcel(HttpServletResponse response) throws IOException{
+        response.setContentType("application/octet-stream");
+        String headerKey = "Conteent-Disposition";
+        String headerValue = "attachment; filename=result_product";
+        response.setHeader(headerKey,headerValue);
+
+        ResponseEntity<ProductResponseRest> responseEntity = productService.search();
+        ProductExcelExport excelExporter = new ProductExcelExport(responseEntity.getBody().getProduct().getProducts());
+        excelExporter.export(response);
     }
 }
